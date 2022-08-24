@@ -8,47 +8,37 @@ function createListElement() {
     return listElement;
 }
 
-taskInput.addEventListener('keypress', (event: any) => {
-    if (event.keyCode === 13) {
-        if (!taskInput.value) return;
-        createTask(taskInput.value);
-    }
-});
-
 function clearInput() {
     taskInput.value = '';
     taskInput.focus();
 }
 
-function createDeleteButton(listElement: HTMLLIElement) {
+function createButtons(listElement: HTMLLIElement) {
     listElement.innerText += ' ';
+
+    const buttonsSpan = document.createElement('span')
+
     const deleteButton = document.createElement('button');
     deleteButton.innerText = 'Apagar';
-    deleteButton.setAttribute('class', 'delete');
-    listElement.appendChild(deleteButton);
+    deleteButton.setAttribute('class', 'delete margin-left');
+    buttonsSpan.appendChild(deleteButton)
+
+    const editButton = document.createElement('button');
+    editButton.innerText = 'Editar';
+    editButton.setAttribute('class', 'edit margin-left');
+    buttonsSpan.appendChild(editButton)
+
+    listElement.appendChild(buttonsSpan);
 }
 
-function createTask(textInput) {
+function createTask(inputText: string) {
     const listElement = createListElement();
-    listElement.innerText = textInput;
+    listElement.innerText = inputText;
     tasks.appendChild(listElement);
     clearInput();
-    createDeleteButton(listElement);
+    createButtons(listElement)
     storeTasks();
 }
-
-addTaskButton.addEventListener('click', () => {
-    if (!taskInput.value) return;
-    createTask(taskInput.value);
-});
-
-body.addEventListener('click', (event) => {
-    const element = (<HTMLElement>event.target);
-    if (element.classList.contains('delete')) {
-        element.parentElement.remove();
-        storeTasks()
-    }
-});
 
 function storeTasks() {
     const tasksList = [...tasks.querySelectorAll('li') as any];
@@ -57,6 +47,7 @@ function storeTasks() {
     for (let tasks of tasksList) {
         let taskText = tasks.innerText;
         taskText = taskText.replace('Apagar', '').trim();
+        taskText = taskText.replace('Editar', '').trim();
         finalList.push(taskText);
     }
 
@@ -72,4 +63,54 @@ function getTasksFromStorage() {
         createTask(tasks);
     }
 }
+
+taskInput.addEventListener('keypress', (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+        if (!taskInput.value) return;
+        createTask(taskInput.value);
+    }
+});
+
+
+addTaskButton.addEventListener('click', () => {
+    if (!taskInput.value) return;
+    createTask(taskInput.value);
+});
+
+body.addEventListener('click', (event: MouseEvent) => {
+    const element = (<HTMLElement>event.target);
+    const listElement = element.parentElement.parentElement
+    if (element.classList.contains('delete')) {
+        listElement.remove()
+        storeTasks()
+    }
+});
+
+body.addEventListener('click', (event: MouseEvent) => {
+    const element = (<HTMLElement>event.target);
+    const parentElement = element.parentElement
+    if (element.classList.contains('edit')) {
+        element.remove()
+        const inputElement = document.createElement('input')
+        const saveEdit = document.createElement('button')
+        saveEdit.innerText = 'Salvar'
+        saveEdit.setAttribute('class', 'save')
+        inputElement.setAttribute('class', 'margin-left')
+        inputElement.setAttribute('id', 'edit-input')
+        parentElement.appendChild(inputElement)
+        parentElement.appendChild(saveEdit)
+    }
+});
+
+body.addEventListener('click', (event: MouseEvent) => {
+    const element = (<HTMLElement>event.target);
+    const listElement = element.parentElement.parentElement as unknown as HTMLLIElement
+    if (element.classList.contains('save')) {
+        const editInput = <HTMLInputElement>document.getElementById('edit-input');
+        listElement.innerHTML = editInput.value
+        createButtons(listElement)
+        storeTasks()
+    }
+});
+
 getTasksFromStorage();

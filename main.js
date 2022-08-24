@@ -15,44 +15,31 @@ function createListElement() {
     var listElement = document.createElement('li');
     return listElement;
 }
-taskInput.addEventListener('keypress', function (event) {
-    if (event.keyCode === 13) {
-        if (!taskInput.value)
-            return;
-        createTask(taskInput.value);
-    }
-});
 function clearInput() {
     taskInput.value = '';
     taskInput.focus();
 }
-function createDeleteButton(listElement) {
+function createButtons(listElement) {
     listElement.innerText += ' ';
+    var buttonsSpan = document.createElement('span');
     var deleteButton = document.createElement('button');
     deleteButton.innerText = 'Apagar';
-    deleteButton.setAttribute('class', 'delete');
-    listElement.appendChild(deleteButton);
+    deleteButton.setAttribute('class', 'delete margin-left');
+    buttonsSpan.appendChild(deleteButton);
+    var editButton = document.createElement('button');
+    editButton.innerText = 'Editar';
+    editButton.setAttribute('class', 'edit margin-left');
+    buttonsSpan.appendChild(editButton);
+    listElement.appendChild(buttonsSpan);
 }
-function createTask(textInput) {
+function createTask(inputText) {
     var listElement = createListElement();
-    listElement.innerText = textInput;
+    listElement.innerText = inputText;
     tasks.appendChild(listElement);
     clearInput();
-    createDeleteButton(listElement);
+    createButtons(listElement);
     storeTasks();
 }
-addTaskButton.addEventListener('click', function () {
-    if (!taskInput.value)
-        return;
-    createTask(taskInput.value);
-});
-body.addEventListener('click', function (event) {
-    var element = event.target;
-    if (element.classList.contains('delete')) {
-        element.parentElement.remove();
-        storeTasks();
-    }
-});
 function storeTasks() {
     var tasksList = __spreadArray([], tasks.querySelectorAll('li'), true);
     var finalList = [];
@@ -60,6 +47,7 @@ function storeTasks() {
         var tasks_1 = tasksList_1[_i];
         var taskText = tasks_1.innerText;
         taskText = taskText.replace('Apagar', '').trim();
+        taskText = taskText.replace('Editar', '').trim();
         finalList.push(taskText);
     }
     var tasksJSON = JSON.stringify(finalList);
@@ -73,4 +61,49 @@ function getTasksFromStorage() {
         createTask(tasks_2);
     }
 }
+taskInput.addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+        if (!taskInput.value)
+            return;
+        createTask(taskInput.value);
+    }
+});
+addTaskButton.addEventListener('click', function () {
+    if (!taskInput.value)
+        return;
+    createTask(taskInput.value);
+});
+body.addEventListener('click', function (event) {
+    var element = event.target;
+    var listElement = element.parentElement.parentElement;
+    if (element.classList.contains('delete')) {
+        listElement.remove();
+        storeTasks();
+    }
+});
+body.addEventListener('click', function (event) {
+    var element = event.target;
+    var parentElement = element.parentElement;
+    if (element.classList.contains('edit')) {
+        element.remove();
+        var inputElement = document.createElement('input');
+        var saveEdit = document.createElement('button');
+        saveEdit.innerText = 'Salvar';
+        saveEdit.setAttribute('class', 'save');
+        inputElement.setAttribute('class', 'margin-left');
+        inputElement.setAttribute('id', 'edit-input');
+        parentElement.appendChild(inputElement);
+        parentElement.appendChild(saveEdit);
+    }
+});
+body.addEventListener('click', function (event) {
+    var element = event.target;
+    var listElement = element.parentElement.parentElement;
+    if (element.classList.contains('save')) {
+        var editInput = document.getElementById('edit-input');
+        listElement.innerHTML = editInput.value;
+        createButtons(listElement);
+        storeTasks();
+    }
+});
 getTasksFromStorage();
