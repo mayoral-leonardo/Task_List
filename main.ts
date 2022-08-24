@@ -94,7 +94,7 @@ body.addEventListener('click', (event: MouseEvent) => {
     const inputElement = document.createElement('input')
     const saveEdit = document.createElement('button')
     saveEdit.innerText = 'Salvar'
-    saveEdit.setAttribute('class', 'save')
+    saveEdit.setAttribute('class', 'save margin-left')
     inputElement.setAttribute('class', 'margin-left')
     inputElement.setAttribute('id', 'edit-input')
     parentElement.appendChild(inputElement)
