@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "sourceMap": true,
+    "lib": ["ES2017", "DOM", "DOM.Iterable"]
+  },
+  "exclude": [
+    "node_modules"
+  ],
+
+  
+}
