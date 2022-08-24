@@ -3,6 +3,6 @@
     "typescript": "^4.7.4"
   },
   "scripts": {
-    "dev": "npx tsc main.ts --w"
+    "dev": "concurrently \"npx tsc main.ts --w\" \"lessc ./assets/css/style.less ./assets/css/style.css\""
   }
 }

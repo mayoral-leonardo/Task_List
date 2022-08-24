@@ -1,15 +1,28 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: normal;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/opensans/v34/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: normal;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/opensans/v34/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsg-1x4gaVc.ttf) format('truetype');
+}
 :root {
-  --primary-color: rgb(17, 86, 102);
+  --primary-color: #115666;
   --footer-color: #FFFFFF;
   --heart-color: #F50F0F;
 }
-
 * {
   box-sizing: border-box;
   outline: 0;
 }
-
 body {
   margin: 0;
   padding: 0;
@@ -18,7 +31,6 @@ body {
   font-size: 1.3em;
   line-height: 1.5em;
 }
-
 .container {
   max-width: 640px;
   margin: 50px auto;
@@ -26,9 +38,6 @@ body {
   padding: 20px;
   border-radius: 10px;
 }
-
 .margin-left {
   margin-left: 5px;
 }
-
-
