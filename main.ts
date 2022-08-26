@@ -71,7 +71,6 @@ taskInput.addEventListener('keypress', (event: KeyboardEvent) => {
   }
 })
 
-
 addTaskButton.addEventListener('click', () => {
   if (!taskInput.value) return
   createTask(taskInput.value)
@@ -82,7 +81,6 @@ body.addEventListener('click', (event: MouseEvent) => {
   const elementClassList = element.classList
   const parentElement = element.parentElement
   const listElement = parentElement.parentElement as unknown as HTMLLIElement
-
 
   if (elementClassList.contains('delete')) {
     listElement.remove()
@@ -110,9 +108,7 @@ body.addEventListener('click', (event: MouseEvent) => {
       createButtons(listElement)
       storeTasks()
     }
-
   }
 })
-
 
 getTasksFromStorage()
