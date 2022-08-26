@@ -79,17 +79,16 @@ addTaskButton.addEventListener('click', () => {
 
 body.addEventListener('click', (event: MouseEvent) => {
   const element = (<HTMLElement>event.target)
-  const listElement = element.parentElement.parentElement
-  if (element.classList.contains('delete')) {
+  const elementClassList = element.classList
+  const parentElement = element.parentElement
+  const listElement = parentElement.parentElement as unknown as HTMLLIElement
+
+
+  if (elementClassList.contains('delete')) {
     listElement.remove()
     storeTasks()
-  }
-})
 
-body.addEventListener('click', (event: MouseEvent) => {
-  const element = (<HTMLElement>event.target)
-  const parentElement = element.parentElement
-  if (element.classList.contains('edit')) {
+  } else if (elementClassList.contains('edit')) {
     element.remove()
     const inputElement = document.createElement('input')
     const saveEdit = document.createElement('button')
@@ -99,18 +98,21 @@ body.addEventListener('click', (event: MouseEvent) => {
     inputElement.setAttribute('id', 'edit-input')
     parentElement.appendChild(inputElement)
     parentElement.appendChild(saveEdit)
+
+  } else if (elementClassList.contains('save')) {
+    const listElement = element.parentElement.parentElement as unknown as HTMLLIElement
+    const editInput = <HTMLInputElement>document.getElementById('edit-input')
+
+    if (!editInput.value) {
+      alert('Digite algo para poder editar!')
+    } else {
+      listElement.innerHTML = editInput.value
+      createButtons(listElement)
+      storeTasks()
+    }
+
   }
 })
 
-body.addEventListener('click', (event: MouseEvent) => {
-  const element = (<HTMLElement>event.target)
-  const listElement = element.parentElement.parentElement as unknown as HTMLLIElement
-  if (element.classList.contains('save')) {
-    const editInput = <HTMLInputElement>document.getElementById('edit-input')
-    listElement.innerHTML = editInput.value
-    createButtons(listElement)
-    storeTasks()
-  }
-})
 
 getTasksFromStorage()

@@ -75,16 +75,14 @@ addTaskButton.addEventListener('click', function () {
 });
 body.addEventListener('click', function (event) {
     var element = event.target;
-    var listElement = element.parentElement.parentElement;
-    if (element.classList.contains('delete')) {
+    var elementClassList = element.classList;
+    var parentElement = element.parentElement;
+    var listElement = parentElement.parentElement;
+    if (elementClassList.contains('delete')) {
         listElement.remove();
         storeTasks();
     }
-});
-body.addEventListener('click', function (event) {
-    var element = event.target;
-    var parentElement = element.parentElement;
-    if (element.classList.contains('edit')) {
+    else if (elementClassList.contains('edit')) {
         element.remove();
         var inputElement = document.createElement('input');
         var saveEdit = document.createElement('button');
@@ -95,15 +93,17 @@ body.addEventListener('click', function (event) {
         parentElement.appendChild(inputElement);
         parentElement.appendChild(saveEdit);
     }
-});
-body.addEventListener('click', function (event) {
-    var element = event.target;
-    var listElement = element.parentElement.parentElement;
-    if (element.classList.contains('save')) {
+    else if (elementClassList.contains('save')) {
+        var listElement_1 = element.parentElement.parentElement;
         var editInput = document.getElementById('edit-input');
-        listElement.innerHTML = editInput.value;
-        createButtons(listElement);
-        storeTasks();
+        if (!editInput.value) {
+            alert('Digite algo para poder editar!');
+        }
+        else {
+            listElement_1.innerHTML = editInput.value;
+            createButtons(listElement_1);
+            storeTasks();
+        }
     }
 });
 getTasksFromStorage();
